@@ -1,6 +1,7 @@
 import {Router} from "express"
-import { registerValidator } from "../validators/auth.validator.js";
-import { register } from "../controllers/auth.controller.js";
+import { loginValidator, registerValidator } from "../validators/auth.validator.js";
+import { login, refresh, register } from "../controllers/auth.controller.js";
+import { authenticate, getMe } from "../middleware/auth.middleware.js";
 const router = Router()
 
 
@@ -12,5 +13,25 @@ const router = Router()
  */
 
 router.post("/register", registerValidator, register)
+
+/**
+ * @POST /api/auth/login
+ * @param req
+ * @param req.body = {email,password}
+ * res.status = 200
+ */
+router.post("/login", loginValidator, login)
+
+
+/**
+ * @POST /api/auth/refresh
+ */
+router.post('/refresh', refresh)
+
+
+/**
+ * @GET /api/auth/me
+ */
+router.get("/me", authenticate, getMe)
 
 export default router;
